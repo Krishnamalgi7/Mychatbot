@@ -414,9 +414,9 @@ docker compose up --build
 ---
 
 
-## Author
+## Built by
 
 **Krishna Sudhir Malgi**
 
-- GitHub: [https://github.com/Krishnamalgi7](https://github.com/Krishnamalgi7)
-- LinkedIn: [www.linkedin.com/in/krishna-malgi](https://www.linkedin.com/in/krishna-malgi/)
+- GitHub: [Krishnamalgi7](https://github.com/Krishnamalgi7)
+- LinkedIn: [Krishna Malgi](https://www.linkedin.com/in/krishna-malgi/)
