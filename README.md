@@ -10,8 +10,10 @@ Upload a PDF or image, ask questions about it, and get grounded answers — or j
 [![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-pgvector-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-Auth%20%26%20DB-3FCF8E?logo=supabase&logoColor=white)](https://supabase.com/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?logo=javascript&logoColor=black)](https://developer.mozilla.org/docs/Web/JavaScript)
 [![Groq](https://img.shields.io/badge/Groq-Llama%203.3--70B-F55036)](https://groq.com/)
-[![License](https://img.shields.io/badge/License-MIT-lightgrey)](#license)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![Docker Compose](https://img.shields.io/badge/Docker_Compose-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/compose/)
 
 </div>
 
@@ -31,9 +33,9 @@ Upload a PDF or image, ask questions about it, and get grounded answers — or j
 - [Tech stack](#tech-stack)
 - [Project structure](#project-structure)
 - [Getting started](#getting-started)
+- [Running with Docker](#running-with-docker)
 - [API reference](#api-reference)
 - [Known limitations](#known-limitations)
-- [License](#license)
 
 ---
 
@@ -197,6 +199,8 @@ Each user can own multiple uploaded documents and chat messages. The `documents`
 | Re-ranking | Cross-encoder re-ranker over top retrieved chunks |
 | LLM | Groq — Llama 3.3-70B (streaming) |
 | Document parsing | `pdfplumber`, OCR, table extraction |
+| Containerization | Docker, Docker Compose |
+
 
 ---
 
@@ -206,8 +210,10 @@ Each user can own multiple uploaded documents and chat messages. The `documents`
 Kito AI/
 ├── backend/
 │   ├── app/                        FastAPI application code
-│   ├── .env                        Environment variables (not committed)
-│   └── requirements.txt
+│   ├── Dockerfile
+│   ├── .dockerignore
+│   ├── requirements.txt
+│   └── .env                        Environment variables (not committed)
 ├── docs/
 │   ├── diagrams/
 │   │   ├── system-architecture.png
@@ -221,10 +227,12 @@ Kito AI/
 │       ├── 03_document_response.png
 │       └── 04_session_summary.png
 ├── frontend/
-│   ├── chat.html                   The application Interface
-│   ├── index.html                  Redirects to chat.html
+│   ├── Dockerfile
 │   ├── css/
-│   └── js/
+│   ├── js/
+│   ├── chat.html                 Redirects to chat.html
+│   └── index.html                The application Interface
+├── docker-compose.yml
 ├── .gitignore
 ├── render.yaml
 └── README.md
@@ -294,6 +302,71 @@ Visit `http://localhost:8080`.
 
 ---
 
+## Running with Docker
+
+The entire stack (backend + frontend) can be brought up with a single command using Docker Compose, instead of running each service manually.
+
+### Prerequisites
+
+- Docker and Docker Compose installed
+- A Supabase project with `pgvector` enabled
+- A Groq API key
+
+### 1. Configure environment variables
+
+Create `backend/.env` as described above:
+
+```
+DATABASE_URL=your_postgres_connection_string
+GROQ_API_KEY=your_groq_api_key
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+This file is referenced directly by `docker-compose.yml` via `env_file` and is not copied into any image or committed to version control.
+
+### 2. Build and start the containers
+
+```bash
+docker compose up --build
+```
+
+This builds the `backend` and `frontend` images from their respective Dockerfiles and starts both containers:
+
+| Service | Container name | Port |
+|---|---|---|
+| `backend` | `rag-backend-container` | `http://localhost:8000` |
+| `frontend` | `rag-frontend-container` | `http://localhost:80` |
+
+The frontend container serves the static files via `nginx:alpine`.
+
+### 3. Run in the background
+
+```bash
+docker compose up -d
+
+```
+
+### View container logs
+
+```bash
+docker compose logs -f
+```
+
+### 4. Stop the containers
+
+```bash
+docker compose down
+```
+
+### 5. Rebuild after code changes
+
+```bash
+docker compose up --build
+```
+
+---
+
 ## API Reference
 
 ### Authentication & Health
@@ -332,10 +405,10 @@ Visit `http://localhost:8080`.
 
 ---
 
-## Current Limitations
+## Known Limitations
 
 - Upload job status is stored in memory, so it doesn't survive a backend restart or scale across multiple instances without moving to shared storage such as Redis.
-- OCR and table extraction depend on Tesseract and Poppler being installed on the host — they aren't pulled in automatically by `pip install`.
+- When running the application locally without Docker, Tesseract OCR and Poppler must be installed separately. Docker-based deployments include these dependencies automatically.
 - CORS is currently open to all origins for ease of local development; restrict this before deploying publicly.
 
 ---
@@ -345,5 +418,5 @@ Visit `http://localhost:8080`.
 
 **Krishna Sudhir Malgi**
 
-- GitHub: https://github.com/Krishnamalgi7
-- LinkedIn: https://www.linkedin.com/in/krishna-malgi/
+- GitHub: [https://github.com/Krishnamalgi7](https://github.com/Krishnamalgi7)
+- LinkedIn: [www.linkedin.com/in/krishna-malgi](https://www.linkedin.com/in/krishna-malgi/)
