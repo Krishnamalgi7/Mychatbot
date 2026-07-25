@@ -6,6 +6,10 @@ __pycache__/
 *.pyd
 .env
 
+# IDE settings
+.idea/
+.vscode/
+
 # Backend
 backend/__pycache__/
 
