@@ -1,10 +1,15 @@
 # Python
 venv/
+.venv/
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
+# Environment Files
 .env
+backend/.env
+frontend/.env
 
 # IDE settings
 .idea/
@@ -18,6 +23,12 @@ frontend/node_modules/
 node_modules/
 dist/
 build/
+
+# Docker
+*.tar
+
+# Logs
+*.log
 
 # OS
 .DS_Store

@@ -1,0 +1,19 @@
+services:
+
+  backend:
+    build: ./backend
+    container_name: rag-backend-container
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: rag-frontend-container
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
